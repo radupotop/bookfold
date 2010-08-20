@@ -27,12 +27,12 @@ class bookfold():
 		for page in range(blankPages):
 			output.addPage(blank.getPage(0))
 
-		# write output
+		# write temp
 		outputStream = file("temp.pdf", "wb")
 		output.write(outputStream)
 		outputStream.close()
 
-		# read output as input
+		# read temp as input
 		input2 = PdfFileReader(file("temp.pdf", "rb"))
 		output = PdfFileWriter()
 		totalPages = input2.getNumPages()
