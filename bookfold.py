@@ -9,6 +9,7 @@ http://blogs.gnome.org/cneumair/2007/03/15/printing-instruction-manuals-how-to-r
 """
 import sys
 import math
+import tempfile
 from os.path import splitext
 from pyPdf import PdfFileWriter, PdfFileReader
 
@@ -63,6 +64,8 @@ def get_rearranged_output_writer(inp):
     
 def main():
     # Handle Arguments
+    BLANK_FILE_NAME = "blank.pdf"
+    
     if len(sys.argv) < 2:
         print "Usage: bookfold.py input.pdf"
         sys.exit(1)
@@ -70,27 +73,22 @@ def main():
         print sys.argv[1]
         input_doc = sys.argv[1]
 
-    blank  = PdfFileReader(file("blank.pdf", "rb"))
+    blank  = PdfFileReader(file(BLANK_FILE_NAME, "rb"))
     input1 = PdfFileReader(file(input_doc, "rb"))
 
     # Copy the Input Document to Output (padding if necessary)
-    output = get_cloned_output_writer(input1, blank)
+    cloned_output = get_cloned_output_writer(input1, blank)
 
-    # write temp
-    with file("temp.pdf", "wb") as outputStream:
-        output.write(outputStream)
 
-    # read temp as input
-    input2 = PdfFileReader(file("temp.pdf", "rb"))
-    output = get_rearranged_output_writer(input2)
+    with tempfile.TemporaryFile() as temp_pdf:
+        cloned_output.write(temp_pdf)
 
-    # write output
-    output_doc = generate_output_name(input_doc)
-    with file(output_doc, "wb") as outputStream:
-        output.write(outputStream)
+        input2 = PdfFileReader(temp_pdf)
+        rearranged_output = get_rearranged_output_writer(input2)
+        output_doc_name = generate_output_name(input_doc)
 
-    import os
-    os.remove("temp.pdf")
+        with file(output_doc_name, "wb") as output_stream:
+            rearranged_output.write(output_stream)
 
 if __name__ == "__main__":
     main()
