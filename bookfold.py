@@ -40,11 +40,11 @@ class bookfold():
 			if i % 2:
 				output.addPage(input2.getPage(totalPages-i))
 				output.addPage(input2.getPage(i-1))
-				print totalPages+1-i, i,
+				print totalPages+1-i,",",i,",",
 			else:
 				output.addPage(input2.getPage(i-1))
 				output.addPage(input2.getPage(totalPages-i))
-				print i, totalPages+1-i,
+				print i,",",totalPages+1-i,",",
 
 		# write output
 		outputStream = file("output.pdf", "wb")
