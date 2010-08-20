@@ -1,4 +1,6 @@
 #!/usr/bin/python
+#
+# Usage: ./bookfold.py input.pdf
 
 class bookfold():
 	'''
