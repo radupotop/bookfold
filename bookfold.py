@@ -34,13 +34,10 @@ def get_cloned_output_writer(inp, blank):
         output.addPage(inp.getPage(page))
 
     # Pad if necessary
-    if num_pages % 4 == 0:
-        return output
-
-    blank_to_add = int(math.ceil(num_pages / 4.0)) * 4 - num_pages
-
-    for _ in xrange(blank_to_add):
-        output.addPage(blank.getPage(0))
+    if num_pages % 4 != 0:
+        blank_to_add = int(math.ceil(num_pages / 4.0)) * 4 - num_pages
+        for _ in xrange(blank_to_add):
+            output.addPage(blank.getPage(0))
     
     return output
 
@@ -67,7 +64,7 @@ def main():
     BLANK_FILE_NAME = "blank.pdf"
     
     if len(sys.argv) < 2:
-        print "Usage: bookfold.py input.pdf"
+        print "Usage: ./bookfold.py input.pdf"
         sys.exit(1)
     else:
         print sys.argv[1]
@@ -78,7 +75,6 @@ def main():
 
     # Copy the Input Document to Output (padding if necessary)
     cloned_output = get_cloned_output_writer(input1, blank)
-
 
     with tempfile.TemporaryFile() as temp_pdf:
         cloned_output.write(temp_pdf)
