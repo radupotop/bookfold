@@ -61,7 +61,7 @@ def get_rearranged_output_writer(inp):
     
 def main():
     # Handle Arguments
-    BLANK_FILE_NAME = dirname(abspath(__file__)) + "/blank.pdf"
+    BLANK_FILE_NAME = dirname(realpath(__file__)) + "/blank.pdf"
     
     if len(sys.argv) < 2:
         print "Usage: ./bookfold.py input.pdf"
