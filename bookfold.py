@@ -10,7 +10,7 @@ http://blogs.gnome.org/cneumair/2007/03/15/printing-instruction-manuals-how-to-r
 import sys
 import math
 import tempfile
-from os.path import splitext
+from os.path import *
 from pyPdf import PdfFileWriter, PdfFileReader
 
 def generate_output_name(input_name):
@@ -61,7 +61,7 @@ def get_rearranged_output_writer(inp):
     
 def main():
     # Handle Arguments
-    BLANK_FILE_NAME = "blank.pdf"
+    BLANK_FILE_NAME = dirname(abspath(__file__)) + "/blank.pdf"
     
     if len(sys.argv) < 2:
         print "Usage: ./bookfold.py input.pdf"
