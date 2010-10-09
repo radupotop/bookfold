@@ -10,7 +10,7 @@ http://blogs.gnome.org/cneumair/2007/03/15/printing-instruction-manuals-how-to-r
 import sys
 import math
 import tempfile
-from os.path import *
+import os.path
 from pyPdf import PdfFileWriter, PdfFileReader
 
 def generate_output_name(input_name):
@@ -18,7 +18,7 @@ def generate_output_name(input_name):
     mybook.pdf -> mybook-bookfold.pdf
     hello.pdf -> hello-bookfold.pdf
     """
-    (root, ext) = splitext(input_name)
+    (root, ext) = os.path.splitext(input_name)
     suffix = "-bookfold"
     return root + suffix + ext
 
@@ -61,7 +61,7 @@ def get_rearranged_output_writer(inp):
     
 def main():
     # Handle Arguments
-    BLANK_FILE_NAME = dirname(realpath(__file__)) + "/blank.pdf"
+    BLANK_FILE_NAME = os.path.dirname(os.path.realpath(__file__)) + "/blank.pdf"
     
     if len(sys.argv) < 2:
         print "Usage: ./bookfold.py input.pdf"
