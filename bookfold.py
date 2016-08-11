@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """
 BookFold: Makes a PDF suitable for printing
 
@@ -11,7 +11,7 @@ import sys
 import math
 import tempfile
 import os.path
-from pyPdf import PdfFileWriter, PdfFileReader
+from PyPDF2 import PdfFileWriter, PdfFileReader
 
 def generate_output_name(input_name):
     """
@@ -28,17 +28,17 @@ def get_cloned_output_writer(inp, blank):
     """
     output = PdfFileWriter()
     num_pages = inp.getNumPages()
-    
+
     # Copy Input Pages
-    for page in xrange(num_pages):
+    for page in range(num_pages):
         output.addPage(inp.getPage(page))
 
     # Pad if necessary
     if num_pages % 4 != 0:
         blank_to_add = int(math.ceil(num_pages / 4.0)) * 4 - num_pages
-        for _ in xrange(blank_to_add):
+        for _ in range(blank_to_add):
             output.addPage(blank.getPage(0))
-    
+
     return output
 
 def get_rearranged_output_writer(inp):
@@ -48,30 +48,30 @@ def get_rearranged_output_writer(inp):
     output = PdfFileWriter()
     total_pages = inp.getNumPages()
 
-    for i in range(1, total_pages/2 + 1):
+    for i in range(1, int(total_pages/2) + 1):
         if i % 2:
             output.addPage(inp.getPage(total_pages - i))
             output.addPage(inp.getPage(i - 1))
-            print total_pages + 1 - i, "," ,i, "," ,
+            print(total_pages + 1 - i, "," ,i, "," ,)
         else:
             output.addPage(inp.getPage(i - 1))
             output.addPage(inp.getPage(total_pages - i))
-            print i , "," , total_pages + 1 - i, "," ,
+            print(i , "," , total_pages + 1 - i, "," ,)
     return output
-    
+
 def main():
     # Handle Arguments
     BLANK_FILE_NAME = os.path.dirname(os.path.realpath(__file__)) + "/blank.pdf"
-    
+
     if len(sys.argv) < 2:
-        print "Usage: ./bookfold.py input.pdf"
+        print("Usage: ./bookfold.py input.pdf")
         sys.exit(1)
     else:
-        print sys.argv[1]
+        print(sys.argv[1])
         input_doc = sys.argv[1]
 
-    blank  = PdfFileReader(file(BLANK_FILE_NAME, "rb"))
-    input1 = PdfFileReader(file(input_doc, "rb"))
+    blank  = PdfFileReader(open(BLANK_FILE_NAME, "rb"))
+    input1 = PdfFileReader(open(input_doc, "rb"))
 
     # Copy the Input Document to Output (padding if necessary)
     cloned_output = get_cloned_output_writer(input1, blank)
@@ -83,7 +83,7 @@ def main():
         rearranged_output = get_rearranged_output_writer(input2)
         output_doc_name = generate_output_name(input_doc)
 
-        with file(output_doc_name, "wb") as output_stream:
+        with open(output_doc_name, "wb") as output_stream:
             rearranged_output.write(output_stream)
 
 if __name__ == "__main__":
